@@ -2,22 +2,25 @@
 import datetime
 import webbrowser
 
+SEARCH_ENGINE_URL = {
+    'GOOGLE': 'https://www.google.com/search?q={query}',
+    'DUCK_DUCK_GO': 'https://duckduckgo.com/?q={query}&ia=web',
+}
+
+LOG_FORMAT = '{url} | {query}'
+LOG_FILE = 'search_browser_log.txt'
+
+
+def write_log(file:str, log:str) -> None:
+    with open(file, 'a', encoding='utf-8') as file:
+        print(datetime.datetime.now(), '|', log, file=file)
+
 
 def main():
-    GOOGLE = 'https://www.google.com/search?q={query}'
-    DUCK_DUCK_GO = 'https://duckduckgo.com/?q={query}&ia=web'
-    LOG_DATA = '{url} | {query}'
-
-    url = DUCK_DUCK_GO
     query = input('Input search query:\n').strip()
-    webbrowser.open_new(url.format(query=query))
-    write_log(LOG_DATA.format(query=query, url=url))
-
-
-def write_log(log: str) -> None:
-    LOG_FILE = 'search_browser_log.txt'
-    with open(LOG_FILE, 'a', encoding='utf-8') as log_file:
-        print(datetime.datetime.now(), '|', log, file=log_file)
+    url = SEARCH_ENGINE_URL['GOOGLE'].format(query=query)
+    webbrowser.open_new(url)
+    write_log(LOG_FILE, LOG_FORMAT.format(query=query, url=url))
 
 
 if __name__ == '__main__':
